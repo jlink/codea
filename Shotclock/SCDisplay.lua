@@ -22,13 +22,13 @@ end
 function SCDisplay:draw()
     pushStyle()
     if self.timeIsUp then
-        background(255, 0, 0)
-        fill(255,255,255)
+        background(248, 19, 2, 255)
+        fill(255, 255, 255)
     elseif self.running and self.time < 5 then
-        background(255, 244, 0, 255)
+        background(233, 227, 77, 255)
         fill(0,0,0)
     elseif self.running then
-        background(0, 255, 0)
+        background(148, 219, 95, 255)
         fill(0,0,0)
     else
         background(255, 255, 255)
@@ -46,15 +46,15 @@ function SCDisplay:drawTime(withDecimal)
     else
         toShow = string.format("%2d  ", self.time)
     end
-    self:drawText(toShow, WIDTH - 650, HEIGHT/2)
+    self:drawText(toShow, WIDTH - 660, HEIGHT/2)
 end
 
 function SCDisplay:drawText(str, x, y)
     fontSize(450)
     font("HelveticaNeue")
-    local xOffsets = {0, 240, 410, 530}
-    local yOffsets = {0, 0, -50, -50}
-    local fontSizes = {450, 450, 300, 300}
+    local xOffsets = {0, 240, 400, 510}
+    local yOffsets = {0, 0, -75, -75}
+    local fontSizes = {450, 450, 250, 250}
     for i = 1, #str do
         fontSize(fontSizes[i])
         local xOff = xOffsets[i]
@@ -63,3 +63,6 @@ function SCDisplay:drawText(str, x, y)
     end 
 end
 
+function SCDisplay:isOnDecimals(touch)
+    return touch.x > (WIDTH - 250) 
+end

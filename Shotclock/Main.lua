@@ -6,7 +6,7 @@ hideKeyboard()
 function setup()
     timer = SCTimer()
     display = SCDisplay(timer)
-    horizontalMoves = {}
+    verticalMoves = {}
 end
 
 function draw() 
@@ -15,50 +15,52 @@ function draw()
 end
 
 function touched(touch)
-    if not(timer.running) and isHorizontalMove(touch) then
-        local deltaX = updateDeltaX(touch)
-        local adjustment = getTimeAdjustment(deltaX)
+    if not(timer.running) and isVerticalMove(touch) then
+        local deltaY = updateDeltaY(touch)
+        local adjustment = getTimeAdjustment(deltaY, display:isOnDecimals(touch))
         if math.abs(adjustment) > 0 then
             timer:changeTime(adjustment)
-            clearDeltaX(touch)
+            clearDeltaY(touch)
         end
-    elseif isUpSwipe(touch) then
+    elseif isLeftSwipe(touch) then
         timer:resetFull()
-    elseif isDownSwipe(touch) then
+    elseif isRightSwipe(touch) then
         timer:reset14()
     elseif touch.state == ENDED then
-        if horizontalMoves[touch.id] then
-            horizontalMoves[touch.id] = nil
+        if verticalMoves[touch.id] then
+            verticalMoves[touch.id] = nil
         elseif touch.tapCount > 0 then
             handleTap()
         end
     end
 end
 
-function getTimeAdjustment(deltaX)
-    if deltaX > 30 then
-        return 1
-    elseif deltaX > 10 then
-        return 0.1
-    elseif deltaX < -30 then
-        return -1
-    elseif deltaX < -10 then
-        return -0.1
-    else
-        return 0
+function getTimeAdjustment(deltaY, onDecimals)
+    local adjustment = 0
+    if math.abs(deltaY) < 25 then
+        return adjustment
     end
+    if deltaY > 0 then
+        adjustment = 1
+    elseif deltaY < 0 then
+        adjustment = -1
+    end
+    if onDecimals then
+        adjustment = adjustment * 0.1
+    end
+    return adjustment
 end
 
-function updateDeltaX(touch)
-    if horizontalMoves[touch.id] == nil then
-        horizontalMoves[touch.id] = 0
+function updateDeltaY(touch)
+    if verticalMoves[touch.id] == nil then
+        verticalMoves[touch.id] = 0
     end
-    horizontalMoves[touch.id] = horizontalMoves[touch.id] + touch.deltaX
-    return horizontalMoves[touch.id]
+    verticalMoves[touch.id] = verticalMoves[touch.id] + touch.deltaY
+    return verticalMoves[touch.id]
 end
 
-function clearDeltaX(touch)
-    horizontalMoves[touch.id] = 0
+function clearDeltaY(touch)
+    verticalMoves[touch.id] = 0
 end
 
 function handleTap()
@@ -72,29 +74,23 @@ function handleTap()
     end
 end
 
-function isHorizontalMove(touch)
-    return touch.state == ENDED and touch.tapCount > 0
-end
-
 function isTap(touch)
     return touch.state == ENDED and touch.tapCount > 0
 end
 
-function isUpSwipe(touch)
-    return isVerticalSwipe(touch) and touch.deltaY > 0
+function isLeftSwipe(touch)
+    return isHorizontalSwipe(touch) and touch.deltaX < 0
 end
 
-function isDownSwipe(touch)
-    return isVerticalSwipe(touch) and touch.deltaY < 0
-end
-
-
-function isVerticalSwipe(touch)
-    return touch.state == MOVING and math.abs(touch.deltaY) > math.abs(touch.deltaX) and math.abs(touch.deltaY) > 10
-end
-
-function isHorizontalMove(touch)
-    return touch.state == MOVING and math.abs(touch.deltaY) < math.abs(touch.deltaX)
+function isRightSwipe(touch)
+    return isHorizontalSwipe(touch) and touch.deltaX > 0
 end
 
 
+function isHorizontalSwipe(touch)
+    return touch.state == MOVING and math.abs(touch.deltaX) > math.abs(touch.deltaY) and math.abs(touch.deltaX) > 10
+end
+
+function isVerticalMove(touch)
+    return touch.state == MOVING and math.abs(touch.deltaX) < math.abs(touch.deltaY)
+end
