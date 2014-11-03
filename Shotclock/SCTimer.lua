@@ -5,11 +5,16 @@ function SCTimer:init()
     self.reducedTime = 14.0
     self.currentTime = self.fullTime
     self.running = false
-    self.display = {}
+    self.display = null
+    self.ticker = null
 end
 
 function SCTimer:registerDisplay(func)
     self.display = func
+end
+
+function SCTimer:registerTicker(func)
+    self.ticker = func
 end
 
 function SCTimer:update()
@@ -55,6 +60,7 @@ end
 function SCTimer:updateTime()
     local diff = ElapsedTime - self.refTime
     if (diff > 0.1) then
+        local before = math.floor(self.currentTime)
         if (self.currentTime <= diff) then
             self.currentTime = 0
             self.running = false
@@ -63,12 +69,22 @@ function SCTimer:updateTime()
             self.refTime = ElapsedTime
         end
         self:updateDisplay()
+        if before > math.floor(self.currentTime) then
+            self:tick()
+        end
     end
 end
 
 function SCTimer:updateDisplay()
     if self.display then
         self.display(self.currentTime, self.running)
+    end
+end
+
+function SCTimer:tick()
+    if self.ticker then
+        local secs = math.floor(self.fullTime - self.currentTime)
+        self.ticker(secs)
     end
 end
 

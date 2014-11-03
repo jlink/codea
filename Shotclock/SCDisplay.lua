@@ -34,7 +34,7 @@ function SCDisplay:draw()
         background(255, 255, 255)
         fill(0,0,0)
     end
-    local withDecimals = not(self.running) or self.time < 5
+    local withDecimals = not(self.running) or self.time < 5 or AlwaysDecimals
     self:drawTime(withDecimals)
     popStyle()
 end
@@ -46,15 +46,14 @@ function SCDisplay:drawTime(withDecimal)
     else
         toShow = string.format("%2d  ", self.time)
     end
-    self:drawText(toShow, WIDTH - 660, HEIGHT/2)
+    self:drawText(toShow, WIDTH - 690, HEIGHT/2)
 end
 
 function SCDisplay:drawText(str, x, y)
-    fontSize(450)
     font("HelveticaNeue")
-    local xOffsets = {0, 240, 400, 510}
-    local yOffsets = {0, 0, -75, -75}
-    local fontSizes = {450, 450, 250, 250}
+    local xOffsets = {0, 260, 440, 550}
+    local yOffsets = {0, 0, -50, -50}
+    local fontSizes = {500, 500, 250, 250}
     for i = 1, #str do
         fontSize(fontSizes[i])
         local xOff = xOffsets[i]

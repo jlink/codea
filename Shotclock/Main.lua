@@ -6,12 +6,16 @@ hideKeyboard()
 function setup()
     timer = SCTimer()
     display = SCDisplay(timer)
+    announcement = SCAnnouncement(timer)
     verticalMoves = {}
+    parameter.boolean("AlwaysDecimals", false) 
+    parameter.boolean("Count15Up", true)
 end
 
 function draw() 
     timer:update()
     display:draw()
+    announcement:draw()
 end
 
 function touched(touch)
@@ -20,12 +24,15 @@ function touched(touch)
         local adjustment = getTimeAdjustment(deltaY, display:isOnDecimals(touch))
         if math.abs(adjustment) > 0 then
             timer:changeTime(adjustment)
+            announcement:clear()
             clearDeltaY(touch)
         end
     elseif isLeftSwipe(touch) then
         timer:resetFull()
+        announcement:clear()
     elseif isRightSwipe(touch) then
         timer:reset14()
+        announcement:clear()
     elseif touch.state == ENDED then
         if verticalMoves[touch.id] then
             verticalMoves[touch.id] = nil
@@ -70,6 +77,7 @@ function handleTap()
         timer:start()
     else
         timer:resetFull()
+        announcement:clear()
         timer:start()
     end
 end
@@ -94,3 +102,5 @@ end
 function isVerticalMove(touch)
     return touch.state == MOVING and math.abs(touch.deltaX) < math.abs(touch.deltaY)
 end
+
+
