@@ -1,5 +1,5 @@
 
--- displayMode(FULLSCREEN)
+displayMode(FULLSCREEN)
 supportedOrientations(LANDSCAPE_ANY)
 hideKeyboard()
 
