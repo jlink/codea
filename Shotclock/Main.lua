@@ -9,7 +9,7 @@ function setup()
     announcement = SCAnnouncement(timer)
     verticalMoves = {}
     parameter.boolean("AlwaysDecimals", false) 
-    parameter.boolean("Count15Up", true)
+    parameter.boolean("Count12Up", true)
 end
 
 function draw() 

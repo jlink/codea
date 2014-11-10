@@ -15,14 +15,14 @@ function SCAnnouncement:clear()
 end
 
 function SCAnnouncement:tick(secs)
-    if secs < 15 then
+    if secs < 12 then
         self.text = ""
     else
         self.text = secs
     end
 end
 function SCAnnouncement:draw()
-    if not(self.timer.running) or not(Count15Up) then
+    if not(self.timer.running) or not(Count12Up) then
         return
     end
     pushStyle()
