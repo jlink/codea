@@ -42,19 +42,19 @@ function SCTimer:changeTime(amount)
     self.currentTime = self.currentTime + amount
     self.currentTime = math.max(self.currentTime, 0.4)
     self.currentTime = math.min(self.currentTime, self.fullTime)
-    self:updateDisplay() 
+    self:updateDisplay()
 end
 
 function SCTimer:resetFull()
     self.currentTime = self.fullTime
     self.refTime = ElapsedTime
-    self:updateDisplay() 
+    self:updateDisplay()
 end
 
 function SCTimer:reset14()
     self.currentTime = self.reducedTime
     self.refTime = ElapsedTime
-    self:updateDisplay() 
+    self:updateDisplay()
 end
 
 function SCTimer:updateTime()
@@ -91,4 +91,3 @@ end
 function SCTimer:touched(touch)
     -- Codea does not automatically call this method
 end
-

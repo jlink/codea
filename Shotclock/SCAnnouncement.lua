@@ -28,7 +28,7 @@ function SCAnnouncement:draw()
     pushStyle()
     fontSize(48)
     font("Arial-BoldMT")
-    print(self.text)
+    -- print(self.text)
     text(self.text, WIDTH - 48, 32)
     popStyle()
 end

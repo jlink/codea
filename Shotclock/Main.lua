@@ -8,11 +8,18 @@ function setup()
     display = SCDisplay(timer)
     announcement = SCAnnouncement(timer)
     verticalMoves = {}
-    parameter.boolean("AlwaysDecimals", false) 
+    parameter.boolean("AlwaysDecimals", false)
     parameter.boolean("Count12Up", true)
+    parameter.boolean("LightScreen", true, function(light)
+        if light then
+            ColourScheme = LightScreenColours
+        else
+            ColourScheme = DarkScreenColours
+        end
+    end)
 end
 
-function draw() 
+function draw()
     timer:update()
     display:draw()
     announcement:draw()
@@ -102,5 +109,3 @@ end
 function isVerticalMove(touch)
     return touch.state == MOVING and math.abs(touch.deltaX) < math.abs(touch.deltaY)
 end
-
-
