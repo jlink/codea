@@ -18,9 +18,15 @@ function setup()
       ColourScheme = DarkScreenColours
     end
   end)
+  parameter.boolean("ScreenOn", true)
 end
 
 function draw()
+  if not(ScreenOn) then
+    timer:stop()
+    background(11, 11, 11, 0)
+    return
+  end
   timer:update()
   display:draw()
   announcement:draw()
